@@ -267,9 +267,7 @@ if st.session_state.bot_activado:
             st.session_state.mostrar_bienvenida_texto = False
         st.markdown("---")
 
-    # Aquí irían tus botones de sugerencias 👇
-    # con col1, col2, o lo que uses
-
+with st.sidebar:
 col1, col2 = st.sidebar.columns(2)
     with col1:
         if st.button("📊 Media"):
