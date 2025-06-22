@@ -290,9 +290,11 @@ if st.session_state.bot_activado:
     # Mostrar respuesta si hay pregunta
     if st.session_state.pregunta.strip():
         pregunta = st.session_state.pregunta.lower()
-        with st.spinner("Pensando en la mejor respuesta... 🤔"):
-            burbuja_usuario(pregunta)
-            time.sleep(1.2)
+
+        # 🧠 Spinner de EduBot dentro del sidebar
+        with st.sidebar:
+            with st.spinner("EduBot está escribiendo... ✍️"):
+                time.sleep(1.2)
 
         if "media" in pregunta:
             p1 = estadisticas_dict['P1']['media']
