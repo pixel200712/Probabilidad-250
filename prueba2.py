@@ -38,16 +38,6 @@ def burbuja_bot_animada(texto, contenedor, velocidad=0.04):
     </div>
     """, unsafe_allow_html=True)
 
-
-def burbuja_usuario(texto):
-    st.markdown(f"""
-    <div style='background-color:#004488; padding: 12px 15px; border-radius: 12px 12px 0px 12px;
-                margin-bottom:10px; border-right: 4px solid #3399ff; color:#ffffff;
-                font-family: "Segoe UI", sans-serif; font-size: 14px; text-align:right;'>
-        <b>Tú:</b><br>{texto}
-    </div>
-    """, unsafe_allow_html=True)
-
 # Cargar archivo Excel
 df = pd.read_excel("Calificaciones 1 y 2 parcial Plantel Xonacatlán.xlsx")
 
