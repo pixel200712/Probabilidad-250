@@ -220,6 +220,7 @@ for idx, parcial in enumerate(['P1', 'P2']):
 
     # Mostrar la tabla en su columna correspondiente
     cols[idx].markdown(tabla_html, unsafe_allow_html=True)
+        
 # INICIO DEL BOT CON SESSION STATE
 if 'bot_activado' not in st.session_state:
     st.session_state.bot_activado = False
@@ -250,7 +251,7 @@ if st.session_state.bot_activado:
         """, unsafe_allow_html=True)
         time.sleep(2)
         st.session_state.bienvenida_mostrada = True
-        st.rerun()
+        st.experimental_rerun()
 
     with st.sidebar:
         if st.session_state.mostrar_bienvenida_texto:
