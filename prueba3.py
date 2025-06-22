@@ -220,7 +220,7 @@ for idx, parcial in enumerate(['P1', 'P2']):
 
     # Mostrar la tabla en su columna correspondiente
     cols[idx].markdown(tabla_html, unsafe_allow_html=True)
-        # INICIO DEL BOT CON SESSION STATE
+    # --- INICIO DEL BOT CON SESSION STATE ---
 if 'bot_activado' not in st.session_state:
     st.session_state.bot_activado = False
 if 'pregunta' not in st.session_state:
@@ -230,14 +230,14 @@ if 'bienvenida_mostrada' not in st.session_state:
 if 'sugerencia' not in st.session_state:
     st.session_state.sugerencia = ""
 if 'mostrar_bienvenida_texto' not in st.session_state:
-    st.session_state.mostrar_bienvenida_texto = True  # 👈 NUEVO CONTROL
+    st.session_state.mostrar_bienvenida_texto = True
 
-# ACTIVAR BOT
+# --- ACTIVAR BOT ---
 st.session_state.bot_activado = st.sidebar.checkbox("💬 Mostrar EduBot", value=st.session_state.bot_activado)
 
 if st.session_state.bot_activado:
 
-    # 👇 Esto se ejecuta SOLO la primera vez
+    # 👇 Mostrar bienvenida visual SOLO una vez (con rerun seguro)
     if not st.session_state.bienvenida_mostrada:
         with st.sidebar:
             placeholder = st.empty()
@@ -250,11 +250,13 @@ if st.session_state.bot_activado:
                 </p>
             </div>
             """, unsafe_allow_html=True)
-            time.sleep(2)  # Solo para efecto visual, si quieres
-        st.session_state.bienvenida_mostrada = True
-        st.experimental_rerun()  # ✅ Seguro porque está después del bloque `with st.sidebar`
+            time.sleep(2)  # Simula carga
 
-    # 💬 Texto de bienvenida de EduBot (una sola vez)
+        # 👇 Estas dos líneas van *fuera* del `with st.sidebar:` para evitar errores
+        st.session_state.bienvenida_mostrada = True
+        st.experimental_rerun()
+
+    # 💬 Burbuja de bienvenida de EduBot (solo una vez)
     with st.sidebar:
         if st.session_state.mostrar_bienvenida_texto:
             contenedor = st.empty()
@@ -262,11 +264,13 @@ if st.session_state.bot_activado:
                 "Bienvenido/a al sistema de análisis 📊. Estoy listo para ayudarte con estadísticas. Te dejo algunas sugerencias:",
                 contenedor
             )
-            st.session_state.mostrar_bienvenida_texto = False  # Solo se muestra una vez
+            st.session_state.mostrar_bienvenida_texto = False
         st.markdown("---")
 
-    # Botones de sugerencia
-    col1, col2 = st.sidebar.columns(2)
+    # Aquí irían tus botones de sugerencias 👇
+    # con col1, col2, o lo que uses
+
+col1, col2 = st.sidebar.columns(2)
     with col1:
         if st.button("📊 Media"):
             st.session_state.sugerencia = "¿Cuál es la media?"
