@@ -290,8 +290,8 @@ if st.session_state.bot_activado:
     # Mostrar respuesta si hay pregunta
     if st.session_state.pregunta.strip():
         pregunta = st.session_state.pregunta.lower()
-        burbuja_usuario(pregunta)
         with st.spinner("Pensando en la mejor respuesta... 🤔"):
+            burbuja_usuario(pregunta)
             time.sleep(1.2)
 
         if "media" in pregunta:
