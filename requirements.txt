@@ -1,8 +1,27 @@
+# App base
 streamlit>=1.18.0
+
+# Manipulación y análisis de datos
 pandas>=2.2.2
 numpy>=1.26.4
+scipy>=1.13.1
+
+# Visualización
 matplotlib>=3.8.4
 seaborn>=0.13.2
-scipy>=1.13.1
-fpdf>=1.7.2
+
+# Soporte Excel
+openpyxl>=3.1.2
+
+# Manejo de imágenes
 Pillow>=10.3.0
+
+# Generación de PDFs
+fpdf>=1.7.2
+
+# Manejo de archivos y expresiones regulares
+# (no requieren instalación porque ya vienen con Python)
+# - tempfile
+# - os
+# - re
+# - time
