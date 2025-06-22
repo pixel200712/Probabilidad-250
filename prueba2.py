@@ -260,7 +260,7 @@ if st.session_state.bot_activado:
         """, unsafe_allow_html=True)
         time.sleep(2)
         st.session_state.bienvenida_mostrada = True
-        st.experimental_rerun()
+        st.rerun()
 
     with st.sidebar:
         if st.session_state.mostrar_bienvenida_texto:
