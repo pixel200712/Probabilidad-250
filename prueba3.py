@@ -267,28 +267,25 @@ if st.session_state.bot_activado:
             st.session_state.mostrar_bienvenida_texto = False
         st.markdown("---")
 
+# --- Sugerencias tipo botones ---
 with st.sidebar:
-col1, col2 = st.sidebar.columns(2)
+    col1, col2 = st.columns(2)
+
     with col1:
         if st.button("📊 Media"):
-            st.session_state.sugerencia = "¿Cuál es la media?"
-            st.session_state.pregunta = st.session_state.sugerencia
+            st.session_state.sugerencia = "media"
         if st.button("📈 Mediana"):
-            st.session_state.sugerencia = "¿Cuál es la mediana?"
-            st.session_state.pregunta = st.session_state.sugerencia
+            st.session_state.sugerencia = "mediana"
         if st.button("📦 Boxplot"):
-            st.session_state.sugerencia = "¿Qué es un boxplot?"
-            st.session_state.pregunta = st.session_state.sugerencia
+            st.session_state.sugerencia = "boxplot"
+
     with col2:
         if st.button("📌 Moda"):
-            st.session_state.sugerencia = "¿Cuál es la moda?"
-            st.session_state.pregunta = st.session_state.sugerencia
+            st.session_state.sugerencia = "moda"
         if st.button("📉 Varianza"):
-            st.session_state.sugerencia = "¿Qué es la varianza?"
-            st.session_state.pregunta = st.session_state.sugerencia
-        if st.button("📐 Rango IQR"):
-            st.session_state.sugerencia = "¿Qué es el rango intercuartil (IQR)?"
-            st.session_state.pregunta = st.session_state.sugerencia
+            st.session_state.sugerencia = "varianza"
+        if st.button("📐 IQR"):
+            st.session_state.sugerencia = "iqr"
 
         entrada_usuario = st.sidebar.text_input("✏️ Escribe tu pregunta:", value=st.session_state.pregunta, key="input_pregunta")
 
