@@ -220,7 +220,8 @@ for idx, parcial in enumerate(['P1', 'P2']):
 
     # Mostrar la tabla en su columna correspondiente
     cols[idx].markdown(tabla_html, unsafe_allow_html=True)
-    # --- INICIO DEL BOT CON SESSION STATE ---
+    
+# INICIO DEL BOT CON SESSION STATE
 if 'bot_activado' not in st.session_state:
     st.session_state.bot_activado = False
 if 'pregunta' not in st.session_state:
@@ -230,62 +231,57 @@ if 'bienvenida_mostrada' not in st.session_state:
 if 'sugerencia' not in st.session_state:
     st.session_state.sugerencia = ""
 if 'mostrar_bienvenida_texto' not in st.session_state:
-    st.session_state.mostrar_bienvenida_texto = True
+    st.session_state.mostrar_bienvenida_texto = True  # 👈 NUEVO CONTROL
 
-# --- ACTIVAR BOT ---
+# ACTIVAR BOT
 st.session_state.bot_activado = st.sidebar.checkbox("💬 Mostrar EduBot", value=st.session_state.bot_activado)
 
 if st.session_state.bot_activado:
 
-    # 👇 Mostrar bienvenida visual SOLO una vez (con rerun seguro)
+    # Mostrar bienvenida con efecto de carga solo UNA vez
     if not st.session_state.bienvenida_mostrada:
-        with st.sidebar:
-            placeholder = st.empty()
-            placeholder.markdown("""
-            <div style='background: linear-gradient(to right, #1a1a1a, #212121); padding: 20px; border-radius: 14px; 
-                        box-shadow: 0 4px 12px rgba(0,0,0,0.3); border-left: 6px solid #00ffc8; margin-bottom: 15px;'>
-                <h3 style='color:#00ffc8; font-family:Segoe UI;'>🤖 EduBot</h3>
-                <p style='color:#f1f1f1; font-size:14px; line-height:1.5; font-family:Segoe UI;'>
-                    Iniciando sesión segura...<br>Preparando respuestas inteligentes...
-                </p>
-            </div>
-            """, unsafe_allow_html=True)
-            time.sleep(2)  # Simula carga
-
-        # 👇 Estas dos líneas van *fuera* del `with st.sidebar:` para evitar errores
+        st.sidebar.markdown("""
+        <div style='background: linear-gradient(to right, #1a1a1a, #212121); padding: 20px; border-radius: 14px; 
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.3); border-left: 6px solid #00ffc8; margin-bottom: 15px;'>
+            <h3 style='color:#00ffc8; font-family:Segoe UI;'>🤖 EduBot</h3>
+            <p style='color:#f1f1f1; font-size:14px; line-height:1.5; font-family:Segoe UI;'>
+                Iniciando sesión segura...<br>Preparando respuestas inteligentes...
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+        time.sleep(2)
         st.session_state.bienvenida_mostrada = True
-        st.experimental_rerun()
+        st.rerun()
 
-    # 💬 Burbuja de bienvenida de EduBot (solo una vez)
     with st.sidebar:
         if st.session_state.mostrar_bienvenida_texto:
             contenedor = st.empty()
-            burbuja_bot_animada(
-                "Bienvenido/a al sistema de análisis 📊. Estoy listo para ayudarte con estadísticas. Te dejo algunas sugerencias:",
-                contenedor
-            )
-            st.session_state.mostrar_bienvenida_texto = False
+            burbuja_bot_animada("Bienvenido/a al sistema de análisis 📊. Estoy listo para ayudarte con estadísticas. Te dejo algunas sugerencias:", contenedor)
+            st.session_state.mostrar_bienvenida_texto = False  # 👈 Se muestra una sola vez
         st.markdown("---")
 
-# --- Sugerencias tipo botones ---
-with st.sidebar:
-    col1, col2 = st.columns(2)
-
+    # Botones de sugerencia
+    col1, col2 = st.sidebar.columns(2)
     with col1:
         if st.button("📊 Media"):
-            st.session_state.sugerencia = "media"
+            st.session_state.sugerencia = "¿Cuál es la media?"
+            st.session_state.pregunta = st.session_state.sugerencia
         if st.button("📈 Mediana"):
-            st.session_state.sugerencia = "mediana"
+            st.session_state.sugerencia = "¿Cuál es la mediana?"
+            st.session_state.pregunta = st.session_state.sugerencia
         if st.button("📦 Boxplot"):
-            st.session_state.sugerencia = "boxplot"
-
+            st.session_state.sugerencia = "¿Qué es un boxplot?"
+            st.session_state.pregunta = st.session_state.sugerencia
     with col2:
         if st.button("📌 Moda"):
-            st.session_state.sugerencia = "moda"
+            st.session_state.sugerencia = "¿Cuál es la moda?"
+            st.session_state.pregunta = st.session_state.sugerencia
         if st.button("📉 Varianza"):
-            st.session_state.sugerencia = "varianza"
-        if st.button("📐 IQR"):
-            st.session_state.sugerencia = "iqr"
+            st.session_state.sugerencia = "¿Qué es la varianza?"
+            st.session_state.pregunta = st.session_state.sugerencia
+        if st.button("📐 Rango IQR"):
+            st.session_state.sugerencia = "¿Qué es el rango intercuartil (IQR)?"
+            st.session_state.pregunta = st.session_state.sugerencia
 
         entrada_usuario = st.sidebar.text_input("✏️ Escribe tu pregunta:", value=st.session_state.pregunta, key="input_pregunta")
 
