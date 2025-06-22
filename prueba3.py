@@ -220,8 +220,7 @@ for idx, parcial in enumerate(['P1', 'P2']):
 
     # Mostrar la tabla en su columna correspondiente
     cols[idx].markdown(tabla_html, unsafe_allow_html=True)
-        
-# INICIO DEL BOT CON SESSION STATE
+        # INICIO DEL BOT CON SESSION STATE
 if 'bot_activado' not in st.session_state:
     st.session_state.bot_activado = False
 if 'pregunta' not in st.session_state:
@@ -238,26 +237,32 @@ st.session_state.bot_activado = st.sidebar.checkbox("💬 Mostrar EduBot", value
 
 if st.session_state.bot_activado:
 
-    # Mostrar bienvenida con efecto de carga solo UNA vez
+    # 👇 Esto se ejecuta SOLO la primera vez
     if not st.session_state.bienvenida_mostrada:
-        st.sidebar.markdown("""
-        <div style='background: linear-gradient(to right, #1a1a1a, #212121); padding: 20px; border-radius: 14px; 
-                    box-shadow: 0 4px 12px rgba(0,0,0,0.3); border-left: 6px solid #00ffc8; margin-bottom: 15px;'>
-            <h3 style='color:#00ffc8; font-family:Segoe UI;'>🤖 EduBot</h3>
-            <p style='color:#f1f1f1; font-size:14px; line-height:1.5; font-family:Segoe UI;'>
-                Iniciando sesión segura...<br>Preparando respuestas inteligentes...
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
-        time.sleep(2)
+        with st.sidebar:
+            placeholder = st.empty()
+            placeholder.markdown("""
+            <div style='background: linear-gradient(to right, #1a1a1a, #212121); padding: 20px; border-radius: 14px; 
+                        box-shadow: 0 4px 12px rgba(0,0,0,0.3); border-left: 6px solid #00ffc8; margin-bottom: 15px;'>
+                <h3 style='color:#00ffc8; font-family:Segoe UI;'>🤖 EduBot</h3>
+                <p style='color:#f1f1f1; font-size:14px; line-height:1.5; font-family:Segoe UI;'>
+                    Iniciando sesión segura...<br>Preparando respuestas inteligentes...
+                </p>
+            </div>
+            """, unsafe_allow_html=True)
+            time.sleep(2)  # Solo para efecto visual, si quieres
         st.session_state.bienvenida_mostrada = True
-        st.experimental_rerun()
+        st.experimental_rerun()  # ✅ Seguro porque está después del bloque `with st.sidebar`
 
+    # 💬 Texto de bienvenida de EduBot (una sola vez)
     with st.sidebar:
         if st.session_state.mostrar_bienvenida_texto:
             contenedor = st.empty()
-            burbuja_bot_animada("Bienvenido/a al sistema de análisis 📊. Estoy listo para ayudarte con estadísticas. Te dejo algunas sugerencias:", contenedor)
-            st.session_state.mostrar_bienvenida_texto = False  # 👈 Se muestra una sola vez
+            burbuja_bot_animada(
+                "Bienvenido/a al sistema de análisis 📊. Estoy listo para ayudarte con estadísticas. Te dejo algunas sugerencias:",
+                contenedor
+            )
+            st.session_state.mostrar_bienvenida_texto = False  # Solo se muestra una vez
         st.markdown("---")
 
     # Botones de sugerencia
