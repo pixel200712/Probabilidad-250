@@ -587,7 +587,7 @@ for idx, parcial in enumerate(['P1', 'P2']):
         axes[idx].text(bar.get_x() + bar.get_width()/2, height + 0.3,
                        f'{pct:.1f}%', ha='center', color='white', fontsize=10, fontweight='bold')
 
-    axes[idx].set_title(f'Histograma {parcial}', color='white', fontsize=16, fontweight='bold')
+    axes[idx].set_title(f'{parcial}', color='white', fontsize=16, fontweight='bold')
     axes[idx].set_xlabel('Rango', color='white', fontsize=12)
     axes[idx].set_ylabel('Frecuencia', color='white', fontsize=12)
     axes[idx].tick_params(colors='white')  # ticks blancos
@@ -615,7 +615,6 @@ with st.expander("📋 Ver análisis del histograma ⬇️"):
         st.warning("⚠️ La media en P2 disminuyó, lo que podría indicar un rendimiento más bajo.")
     else:
         st.info("➖ La media se mantuvo estable entre ambos parciales.")
-
 
 # ------------------ Gráfica de pastel -------------------
 st.markdown(f"## 📘 <b>Análisis de {asignatura_seleccionada}</b>", unsafe_allow_html=True)
