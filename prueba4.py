@@ -43,12 +43,27 @@ df = pd.read_excel("Calificaciones 1 y 2 parcial Plantel Xonacatlán.xlsx")
 
 # Configurar Streamlit
 st.set_page_config(layout="wide", page_title="Análisis de Calificaciones")
+
+# Encabezado con sombra azul cielo
 st.markdown("""
-<h1 style='font-family:Segoe UI, sans-serif; color:#00ffc8; font-weight:600;'>
-📊 Análisis de Calificaciones por Asignatura
+<h1 style='
+    font-family: Segoe UI, sans-serif; 
+    font-weight: 700; 
+    font-size: 38px; 
+    color: white;
+    text-shadow: 0 0 4px #00ffd5;    
+    margin-bottom: 0;'>
+    📊 Análisis de Calificaciones por Asignatura
 </h1>
-<h4 style='color:#cccccc; font-family:Segoe UI, sans-serif; font-weight:400; margin-top:-10px;'>
-Visualización y comparación de resultados por parcial
+
+<h4 style='
+    color: #d0d0d0; 
+    font-family: Segoe UI, sans-serif; 
+    font-weight: 400; 
+    font-size: 20px; 
+    margin-top: 5px;
+    text-shadow: 1px 1px 2px #0077cc;'>
+    Visualización y comparación de resultados por parcial
 </h4>
 """, unsafe_allow_html=True)
 
@@ -601,21 +616,22 @@ with st.expander("📋 Ver análisis del histograma ⬇️"):
     else:
         st.info("➖ La media se mantuvo estable entre ambos parciales.")
 
+
 # ------------------ Gráfica de pastel -------------------
 st.markdown(f"## 📘 <b>Análisis de {asignatura_seleccionada}</b>", unsafe_allow_html=True)
 
-# Contenedor de dos columnas paralelas (una para cada parcial)
+# ------------------ Dos columnas (P1 y P2) -------------------
 col1, col2 = st.columns(2)
 
 for idx, parcial in enumerate(['P1', 'P2']):
-    col = col1 if idx == 0 else col2  # Selecciona columna actual
+    col = col1 if idx == 0 else col2
     calificaciones = calificaciones_dict[parcial]
-    
+
     if calificaciones.empty:
         col.markdown(f"### {parcial} - Sin datos")
         continue
 
-    # -------- Prepara datos --------
+    # ------------------ Preparar datos -------------------
     ranges = pd.cut(calificaciones, bins=rango_bins, labels=rango_labels, right=False)
     conteo = ranges.value_counts(sort=False)
     valores = conteo.values
@@ -624,36 +640,92 @@ for idx, parcial in enumerate(['P1', 'P2']):
     total = valores.sum()
     porcentajes = valores / total * 100
 
-    # -------- Crear figura para este parcial --------
-    fig, ax = plt.subplots(figsize=(6, 6), facecolor='#121212')
-    ax.set_facecolor('#121212')
+    # ------------------ Subcolumnas internas -------------------
+    with col:
+        subcol1, subcol2 = st.columns([1.7, 1.3])  # más espacio para la tabla
+        # 2:1 proporción para gráfica y tabla
 
-    ax.pie(
-        valores,
-        labels=None,           # sin etiquetas
-        autopct=None,          # sin porcentaje
-        startangle=90,
-        colors=colores,
-        wedgeprops={'edgecolor': '#121212', 'linewidth': 1.5}
-    )
+        # --------- Gráfica de pastel ---------
+        with subcol1:
+            fig, ax = plt.subplots(figsize=(4.2, 4.2), facecolor='#121212')
+            ax.set_facecolor('#121212')
 
-    ax.set_title(f"Distribución - {parcial}", color='white', fontsize=15, fontweight='bold')
+            ax.pie(
+                valores,
+                labels=None,
+                autopct=None,
+                startangle=90,
+                colors=colores,
+                wedgeprops={'edgecolor': '#121212', 'linewidth': 1.2}
+            )
 
-    # Mostrar gráfica
-    col.pyplot(fig)
+            ax.set_title(f"Distribución - {parcial}", color='white', fontsize=15, fontweight='bold')
+            st.pyplot(fig)
 
-    # -------- Tabla debajo de gráfica --------
-    tabla = "<table style='color:white; font-size:13px; font-weight:normal;'>"
-    tabla += "<tr><th style='text-align:left;'>🎨</th><th style='text-align:left;'>Rango</th><th style='text-align:right;'>%</th></tr>"
-    for c, r, p in zip(colores, etiquetas, porcentajes):
-        tabla += f"<tr>" \
-                 f"<td><div style='width:18px; height:18px; background:{c}; border-radius:4px; box-shadow: 0 0 3px {c};'></div></td>" \
-                 f"<td style='padding-left:10px;'>{r}</td>" \
-                 f"<td style='text-align:right;'>{p:.1f}%</td>" \
-                 f"</tr>"
-    tabla += "</table>"
+        # --------- Tabla de porcentajes a la derecha ---------
+        with subcol2:
+            tabla = f"""
+            <style>
+            table.custom-table {{
+                border-collapse: collapse;
+                width: 100%;
+                table-layout: fixed;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                font-size: 13px;
+                color: white;
+                word-wrap: break-word;
+            }}
+            table.custom-table tr {{
+                transition: background-color 0.3s ease;
+            }}
+            table.custom-table tr:hover {{
+                background-color: rgba(0, 255, 213, 0.1);
+            }}
+            table.custom-table th {{
+                border-bottom: 1px solid #444;
+                padding-bottom: 8px;
+                text-align: left;
+            }}
+            table.custom-table td {{
+                padding: 6px 4px;
+                vertical-align: middle;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }}
+            </style>
 
-    col.markdown(tabla, unsafe_allow_html=True)
+            <table class="custom-table">
+            <tr>
+                <th>🎨</th><th>Rango</th><th style="text-align:right;">%</th>
+            </tr>
+            """
+
+            for c, r, p in zip(colores, etiquetas, porcentajes):
+                tabla += f"""
+                <tr>
+                    <td><div style='width:18px; height:18px; background:{c}; border-radius:3px; box-shadow: 0 0 3px {c};'></div></td>
+                    <td>{r}</td>
+                    <td style='text-align:right;'>
+                        <div style='
+                            background: linear-gradient(to right, {c} {p:.0f}%, transparent {p:.0f}%);
+                            border-radius: 4px;
+                            font-weight: bold;
+                            padding: 3px 7px;
+                            min-width: 25px;  /* 👈 Esto lo agrega */
+                            box-shadow: 0 0 2px {c};
+                            color: white;
+                            font-size: 12px;
+                            text-align: right;'>
+                            {p:.1f}%
+                        </div>
+                    </td>
+                </tr>
+                """
+
+            tabla += "</table>"
+
+            st.components.v1.html(tabla, height=300)
 
 # Guardar las variables para el PDF
 colores_pie1 = [rango_colores[label] for label in pd.cut(calificaciones_dict['P1'], bins=rango_bins, labels=rango_labels, right=False).value_counts(sort=False).index.tolist()]
